@@ -7,6 +7,7 @@
         <!-- Begin Page Content -->
         <div class="container-fluid"> 
                      <!-- Journal -->
+                   
          
           <h1 class="h3 mb-4 text-gray-800 ml-5 pl-3">Journal </h1>
           <hr>
@@ -19,7 +20,7 @@
                             <div class="row">
                                 <div class="form-group col-xl-12 mt-3">
                                     <label for="exampleFormControlFile1">Example file input</label>
-                                    <input type="file" name="fileToUpload" id="fileToUpload" class="form-control-file ">
+                                    <input type="file" name="fileToUpload" id="fileToUpload" class="form-control-file "required>
                             </div>
                                 
                                
@@ -40,15 +41,15 @@
                             <div class="row">
                                 <div class="form-group col-xl-5  mt-3 ml-3">
                                     <label for="exampleFormControlFile1">Example file input</label>
-                                    <input type="file" name="fileToUpload" id="fileToUpload" class="form-control-file ">
+                                    <input type="file" name="fileToUpload" id="fileToUpload" class="form-control-file" >
                             </div>
                                 <div class="form-group col-lg-6">
-                                        <input type="submit" name="submit" class="btn btn-primary  col-xl-8 mt-4 ml-5 ">
+                                        <input type="submit" name="btn_add" value="Add image" class="btn btn-primary  col-xl-8 mt-4 ml-5 ">
                                 </div>
                                
                             </div>
                             <div class="row col-md-12">
-                                <input name="add_id"  class="form-control col-xl-7  m-auto" type="text"
+                                <input name="journal_id"  class="form-control col-xl-7  m-auto" type="text"
                                     placeholder="Edit, Delete or Add by ID" required >
                                 <input name="btn_del" type="submit" class="btn btn-primary col-xl-2 m-auto" value="Delete">
                                 <input name="btn_edit" type="submit" class="btn btn-primary col-xl-2 m-auto" value="Edit">

@@ -320,5 +320,149 @@
                 
     }
 
-?>
+    function uploadEditAddJournal($fun){
+        $target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
+$img = $_FILES["fileToUpload"]["name"];
+$link = mysqli_connect('localhost', "root", "");
+
+// Check if image file is a actual image or fake image
+if(isset($_POST["submit"])) {
+    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        echo "File is not an image.";
+        $uploadOk = 0;
+    }
+}
+// Check if file already exists
+if (file_exists($target_file)) {
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+}
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 5000000) {
+    echo "Sorry, your file is too large.";
+    $uploadOk = 0;
+}
+// Allow certain file formats
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    $uploadOk = 0;
+}
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+} else {
+    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+        
+        
+        $fun;
+        //  if($link){
+        //     if(mysqli_select_db($link,"budget_app")){
+                
+        //             $imgID = uniqid();
+                   
+        //              mysqli_query($link,"INSERT INTO journal_has (journal_id, img_path_id ) 
+        //              VALUES('".$addID."', '".$imgID."');
+        //              ");
+        //              mysqli_query($link,"INSERT INTO img_path (id, img_path ) 
+        //             VALUES('".$imgID."','".$img."' );
+        //             ");
+        //     } else {
+        //         echo '<div class="alert alert-danger">
+        //                     <strong>Error message:</strong> Can not select database.
+        //               </div>';
+        //     }
+        // } else {
+        //     echo '<div class="alert alert-danger">
+        //                 <strong>Error message:</strong> Can not connect to database.
+        //           </div>';
+        // }
+
+        header('Location: jurnal.php');
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+}
+    }
+
+
+
+    function deleteJournal($link, $journalID){
+        if($link && $journalID){
+            if(mysqli_select_db($link,"budget_app")){
+
+                  try {
+                    mysqli_query($link,
+                    "DELETE FROM journal
+                    WHERE journal.id = '".$journalID."';
+                    ");
+                    mysqli_query($link,
+                    "DELETE img_path, journal_has 
+                    FROM img_path
+                    LEFT JOIN journal_has
+                    ON img_path.id =  journal_has.img_path_id
+                    WHERE journal_has.img_path_id IS NULL;
+                    ");
+                      header('Location: jurnal.php');
+                  } catch (\Throwable $th) {
+                //    echo $th;
+                 header('Location: jurnal.php'); 
+                  }
+                        
+            } else {
+                header('Location: jurnal.php'); 
+                // echo '<div class="alert alert-danger">
+                //             <strong>Error message:</strong> Can not select database.
+                //       </div>';
+            }
+        } else {
+            header('Location: jurnal.php');
+           
+            // echo '<div class="alert alert-danger">
+            //             <strong>Error message:</strong> Can not connect to database.
+            //       </div>';
+
+        }
+    }
+
+    function addImageJournal($link, $journalID, $img){
+        if($link){
+                if(mysqli_select_db($link,"budget_app")){
+                    
+                        $imgID = uniqid();
+                       
+                        mysqli_query($link,"INSERT INTO img_path (id, img_path ) 
+                        VALUES('".$imgID."','".$img."' );
+                        ");
+                         mysqli_query($link,"INSERT INTO journal_has (journal_id, img_path_id ) 
+                         VALUES('".$journalID."', '".$imgID."');
+                         ");
+                         
+                } else {
+                    echo '<div class="alert alert-danger">
+                                <strong>Error message:</strong> Can not select database.
+                          </div>';
+                }
+            } else {
+                echo '<div class="alert alert-danger">
+                            <strong>Error message:</strong> Can not connect to database.
+                      </div>';
+            }
+    }
+?>
+<!-- 
+DELETE img_path, journal_has 
+FROM img_path
+LEFT JOIN journal_has
+ON img_path.id =  journal_has.img_path_id
+WHERE journal_has.img_path_id IS NULL -->
